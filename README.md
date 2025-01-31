@@ -1,5 +1,8 @@
 # Project_3
 
+## Setting up the Environment:
+### Packages
+# TODO: Package settup instructions
 ## Requesting a Gemini API Key
 (Copied from bookcamp spot)\
 Before we get to building an AI-powered application, we will need to obtain an OpenAI API key.
@@ -15,3 +18,10 @@ Before we get to building an AI-powered application, we will need to obtain an O
 5. After clicking creating the key you will be able to view and copy your key. This is the key we will use in our applications to make API calls to Gemini. You should be able to view the key again in the future if you need to, but it's still recommended that you record it somewhere securely for your own records.
 
 6. Then, take the key that was generated and add it as a environmental varaible named GEMINI_API_KEY.
+
+## Running
+At it's most current state, please run the following commands in terminal
+    pip install PySide6
+Next navigate to to /project_3/scripts/ui using cd command
+next run python kitchen_ui.py
+This will launch the UI for the project.
