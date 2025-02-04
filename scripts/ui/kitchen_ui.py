@@ -50,7 +50,7 @@ class KitchenApp(QWidget):
         self.hide()
     
     def open_stove(self):
-        self.stove_window = StoveWindow(self)
+        self.stove_window = StoveWindow(self, self.pantry_window)
         self.stove_window.show()
         self.hide()
     
@@ -63,6 +63,9 @@ class KitchenApp(QWidget):
         self.cookbooks_window = CookbooksWindow(self, self.user_preferences)
         self.cookbooks_window.show()
         self.hide()
+
+    def get_pantry_data(self):
+        return self.pantry_data
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

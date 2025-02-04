@@ -6,6 +6,7 @@ class PantryWindow(QWidget):
     def __init__(self, main_window, pantry_data):
         super().__init__()
         self.main_window = main_window
+        self.pantry_data = pantry_data
         self.initUI()
 
     def initUI(self):
@@ -18,7 +19,7 @@ class PantryWindow(QWidget):
         layout.addRow("Item Name:", self.item_input)
         
         self.category_dropdown = QComboBox()
-        self.category_dropdown.addItems(["Staple", "Temporary"])
+        self.category_dropdown.addItems(["Staple", "Fresh"])
         layout.addRow("Category:", self.category_dropdown)
         
         self.expiry_date = QDateEdit()
@@ -55,10 +56,13 @@ class PantryWindow(QWidget):
         self.status_label.setText(f"Added: {item_name}")
         self.item_input.clear()
         self.amount_input.clear()
-    
+
     def close_pantry(self):
         self.main_window.show()
         self.close()
+
+    def get_pantry_data(self):
+        return self.pantry_data.copy()
 
 if __name__ == "__main__":
     from PySide6.QtWidgets import QApplication
