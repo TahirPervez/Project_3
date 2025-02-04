@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QTextEdit
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QComboBox, QTextEdit
 
 from dotenv import load_dotenv
 import os
@@ -29,6 +29,13 @@ class StoveWindow(QWidget):
         self.back_button.clicked.connect(self.close_stove)
         layout.addWidget(self.back_button)
         
+        self.recipe_dropdown = QComboBox()
+        layout.addWidget(self.recipe_dropdown)
+
+        self.recipe_select = QPushButton("Select Recipe", self)
+        self.recipe_select.clicked.connect(self.get_full_recipe)
+        layout.addWidget(self.recipe_select)
+
         self.recipe_label = QTextEdit(self)
         self.recipe_label.setReadOnly(True)
         layout.addWidget(self.recipe_label)
@@ -40,25 +47,21 @@ class StoveWindow(QWidget):
         self.close()
 
     def suggest_button_clicked(self):
-        self.recipe_label.setText("PUSHED")
         load_dotenv()
         api_key = os.getenv("GEMINI_API_KEY")
-        llm = ChatGoogleGenerativeAI(api_key=api_key, model="gemini-1.5-flash", temperature=0.3)
+        recipe_chooser = ChatGoogleGenerativeAI(api_key=api_key, model="gemini-1.5-flash", temperature=0.3)
 
         pantry_data = self.pantry_window.get_pantry_data()  # Fetch latest pantry data
         
         # Convert DataFrames to lists of ingredients
         ingredients = pantry_data['Item Name'].tolist()
         prompt_template = PromptTemplate(
-            input_variables=["fresh_ingredients", "staples"],
+            input_variables=["ingredients"],
             template="""
                 You are helping me plan out my meals based on what I have. I want to provide you
                 a list of ingredients that I know for a fact that I have, and your job is to
-                help me determine a main course that I can make using what I have. In addition, 
-                a simple side dish to go with it is wanted if it is not a meal that would be 
-                eaten without any. I want you to tell me 3 recipes that can be made for the main 
-                course with what I tell you I have, and I will specify the one I want to get the 
-                full instructions for.
+                help me determine a main course that I can make using what I have. I want 3 different
+                recipes to be provided so I have options.
 
                 When selecting the recipes to make, try to ensure that they are different from
                 each other as possible, since if I'm not in the mood for a certain style of food, 
@@ -76,12 +79,57 @@ class StoveWindow(QWidget):
         query = {
             "ingredients":ingredients,
         }
-        self.chain = LLMChain(llm=llm, prompt=prompt_template)
+        chain = LLMChain(llm=recipe_chooser, prompt=prompt_template)
+        result = chain.invoke(query)["text"]
+        recipe_names = [line.split('. ', 1)[1] for line in result.split("\n") if line.strip().startswith(tuple("123"))]
+        self.recipe_dropdown.clear()
+        self.recipe_dropdown.addItems(recipe_names)
+        
+        self.recipe_label.setText(result)
+
+    def get_full_recipe(self):
+        load_dotenv()
+        api_key = os.getenv("GEMINI_API_KEY")
+        recipe_chooser = ChatGoogleGenerativeAI(api_key=api_key, model="gemini-1.5-flash", temperature=0.3)
+
+        pantry_data = self.pantry_window.get_pantry_data()  # Fetch latest pantry data
+        
+        # Convert DataFrames to lists of ingredients
+        ingredients = pantry_data['Item Name'].tolist()
+        prompt_template = PromptTemplate(
+            input_variables=["recipe_name", "ingredients"],
+            template="""
+                You are helping me plan out my meals based on what I have. I want
+                to provide you the name of a recipe and a slist of ingredients that
+                I have. I need a recipe that trys to stick to what I have as much
+                as possible.
+
+                Assume I have oil, herbs, and spices, but they are not listed.
+                
+                I need your answer to be in the format of:
+                <Recipe Name>
+                Ingredients:
+                    - Amount Unit Ingredient #1
+                    ...
+                Directions:
+                    1. Step 1 ...
+                    ...
+
+                I need a recipe for {recipe_name}.
+                I have {ingredients}
+                Answer:
+            """
+        )
+        
+        query = {
+            "recipe_name":self.recipe_dropdown.currentText(),
+            "ingredients":ingredients,
+        }
+        self.chain = LLMChain(llm=recipe_chooser, prompt=prompt_template)
         result = self.chain.invoke(query)["text"]
 
         print(result)
         self.recipe_label.setText(result)
-
 if __name__ == "__main__":
     from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)
