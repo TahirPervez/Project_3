@@ -130,6 +130,7 @@ class StoveWindow(QWidget):
 
         print(result)
         self.recipe_label.setText(result)
+        
 if __name__ == "__main__":
     from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)

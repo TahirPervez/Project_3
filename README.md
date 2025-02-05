@@ -1,8 +1,11 @@
 # Project_3
 
 ## Setting up the Environment:
-### Packages
-# TODO: Package settup instructions
+[Install Conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html#)
+in the command line, run:
+```
+conda env create -f environment.yml
+```
 ## Requesting a Gemini API Key
 (Copied from bookcamp spot)\
 Before we get to building an AI-powered application, we will need to obtain an OpenAI API key.
@@ -20,8 +23,8 @@ Before we get to building an AI-powered application, we will need to obtain an O
 6. Then, take the key that was generated and add it as a environmental varaible named GEMINI_API_KEY.
 
 ## Running
-At it's most current state, please run the following commands in terminal
-    pip install PySide6
-Next navigate to to /project_3/scripts/ui using cd command
-next run python kitchen_ui.py
-This will launch the UI for the project.
+1. Navigate to /project_3/scripts/ui in a CLI
+2. run
+```
+python kitchen_ui.py
+```
