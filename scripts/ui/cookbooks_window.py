@@ -73,7 +73,7 @@ class CookbooksWindow(QWidget):
                 self.cuisine_list.addItem(row["Preferred Cuisines"])
             if row["Diets"]:
                 self.diet_list.addItem(row["Diets"])
-    
+
     def close_cookbooks(self):
         self.main_window.show()
         self.close()

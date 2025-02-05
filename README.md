@@ -1,15 +1,15 @@
 # Project_3
 ## Introduction
-This application takes in ingredients from the user, and uses them to generate recies
+This application takes in ingredients from the user, and uses them to generate recipes
 that can be made.
 - Go to pantry to add in ingredients that you have on hand.
 - Go to the stove to generate recipes based on what you have in the pantry.
 - Go to the cookbooks to incorportate preferences and diets into the meals that you
 want the application to go for.
 - Go to computer to find flavor pairings based on what you have to create a smaller pantry
-and use those to find a recipe based off of a more narrow selection.
+and use those to find a recipe based off of a narrower selection.
 
-## Setting up the Environment:
+## Setting up the Environment
 [Install Conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html#)
 in the command line, run:
 ```

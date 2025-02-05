@@ -52,12 +52,12 @@ class PantryWindow(QWidget):
                                  columns=["Item Name", "Category", "Expiration Date", "Amount"])
         
         self.pantry_data = pd.concat([self.pantry_data, new_entry], ignore_index=True)
-        
         self.status_label.setText(f"Added: {item_name}")
         self.item_input.clear()
         self.amount_input.clear()
 
     def close_pantry(self):
+        self.main_window.pantry_data = self.pantry_data
         self.main_window.show()
         self.close()
 

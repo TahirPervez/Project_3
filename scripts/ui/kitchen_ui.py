@@ -11,7 +11,7 @@ class KitchenApp(QWidget):
         super().__init__()
         self.initUI()
         self.user_preferences = pd.DataFrame(columns=["Preferred Cuisines", "Diets"])
-        self.pantry_data = pd.DataFrame(columns=["Ingredient", "Category", "Expiration Date", "Amount", "Unit"])
+        self.pantry_data = pd.DataFrame(columns=["Item Name", "Category", "Expiration Date", "Amount", "Unit"])
     
     def initUI(self):
         self.setWindowTitle("AI Kitchen Prototype")
@@ -50,7 +50,7 @@ class KitchenApp(QWidget):
         self.hide()
     
     def open_stove(self):
-        self.stove_window = StoveWindow(self, self.pantry_window)
+        self.stove_window = StoveWindow(self)
         self.stove_window.show()
         self.hide()
     
@@ -66,6 +66,9 @@ class KitchenApp(QWidget):
 
     def get_pantry_data(self):
         return self.pantry_data
+
+    def get_user_preferences(self):
+        return self.user_preferences
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
